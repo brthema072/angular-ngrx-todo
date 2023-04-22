@@ -9,6 +9,9 @@ import { AboutComponent } from './pages/about/about.component';
 import { YesNoPipe } from './pipes/yes-no.pipe';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { TodoEffectService } from './store/todo-effect.service';
+import { appReducer } from './store/app.reducer';
 
 @NgModule({
   declarations: [AppComponent, TodosComponent, AboutComponent, YesNoPipe],
@@ -16,8 +19,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    StoreModule.forRoot({}, {}),
+    StoreModule.forRoot({ app: appReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+    EffectsModule.forRoot([TodoEffectService]),
   ],
   providers: [],
   bootstrap: [AppComponent],

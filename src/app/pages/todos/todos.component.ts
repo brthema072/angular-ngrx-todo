@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { TodoService } from '../../services/todo.service';
+import { Store } from '@ngrx/store';
+import { Observable, map } from 'rxjs';
 import { ITodo } from 'src/app/models/todo.model';
+import { loadTodos } from 'src/app/store/app.actions';
+import { IAppState } from 'src/app/store/app.state';
 
 @Component({
   selector: 'app-todos',
@@ -8,14 +11,13 @@ import { ITodo } from 'src/app/models/todo.model';
   styleUrls: ['./todos.component.scss'],
 })
 export class TodosComponent implements OnInit {
-  todos: ITodo[] = [];
+  constructor(private store: Store<{ app: IAppState }>) {}
 
-  constructor(private todoService: TodoService) {}
+  todos$: Observable<ITodo[]> = this.store
+    .select('app')
+    .pipe(map((store) => store.todos));
 
   ngOnInit(): void {
-    this.todoService.getTodoList().subscribe({
-      next: (todos) => (this.todos = todos),
-      error: (err) => console.log(err),
-    });
+    this.store.dispatch(loadTodos());
   }
 }

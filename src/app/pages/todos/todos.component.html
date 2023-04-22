@@ -1,6 +1,6 @@
 <button routerLink="/about">Go to About</button>
 <ul>
-  <li *ngFor="let todo of todos">
+  <li *ngFor="let todo of todos$ | async">
     {{ todo.title }} - {{ todo.completed | yesNo }}
   </li>
 </ul>
